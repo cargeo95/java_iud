@@ -12,6 +12,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import java.util.List;
+
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -455,6 +456,11 @@ public class Main2 extends javax.swing.JFrame {
         });
 
         btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
 
         jLabel11.setText("Funcionarios");
 
@@ -650,7 +656,124 @@ public class Main2 extends javax.swing.JFrame {
     }//GEN-LAST:event_txtFechaEditActionPerformed
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
-        // TODO add your handling code here:
+
+        if (txtId.getText().trim().length() == 0) {
+            JOptionPane.showMessageDialog(null, "Seleccione un funcionario de la lista");
+            txtId.requestFocus();
+            return;
+        }
+
+        if (txtTipoIdentificacionEdit.getText().trim().length() == 0) {
+            JOptionPane.showMessageDialog(null, "Digite Tipo Identificacion");
+            txtTipoIdentificacionEdit.requestFocus();
+            return;
+        }
+
+        if (txtNumeroIdentificacionEdit.getText().trim().length() == 0) {
+            JOptionPane.showMessageDialog(null, "Digite Numero identificacion");
+            txtNumeroIdentificacionEdit.requestFocus();
+            return;
+        }
+
+        if (txtNombreEdit.getText().trim().length() == 0) {
+            JOptionPane.showMessageDialog(null, "Digite Nombre");
+            txtNombreEdit.requestFocus();
+            return;
+        }
+
+        if (txtApellidoEdit.getText().trim().length() == 0) {
+            JOptionPane.showMessageDialog(null, "Digite Apellido");
+            txtApellidoEdit.requestFocus();
+            return;
+        }
+
+        if (txtEstadoCivilEdit.getText().trim().length() == 0) {
+            JOptionPane.showMessageDialog(null, "Digite Estao Civil");
+            txtEstadoCivilEdit.requestFocus();
+            return;
+        }
+
+        if (txtSexoEdit.getText().trim().length() == 0) {
+            JOptionPane.showMessageDialog(null, "Digite sexo");
+            txtSexoEdit.requestFocus();
+            return;
+        }
+
+        if (txtDireccionEdit.getText().trim().length() == 0) {
+            JOptionPane.showMessageDialog(null, "Digite Direccion");
+            txtDireccionEdit.requestFocus();
+            return;
+        }
+
+        if (txtTelefonoEdit.getText().trim().length() == 0) {
+            JOptionPane.showMessageDialog(null, "Digite Telefono");
+            txtTelefonoEdit.requestFocus();
+            return;
+        }
+
+        if (txtFechaEdit.getText().trim().length() == 0) {
+            JOptionPane.showMessageDialog(null, "Digite Fecha nacimiento");
+            txtFechaEdit.requestFocus();
+            return;
+        }
+
+        Funcionario funcionario = new Funcionario();
+        funcionario.setTipo_identificacion(txtTipoIdentificacionEdit.getText().trim());
+        funcionario.setNumero_identificacion(txtNumeroIdentificacionEdit.getText().trim());
+        funcionario.setNombre(txtNombreEdit.getText().trim());
+        funcionario.setApellido(txtApellidoEdit.getText().trim());
+        funcionario.setEstado_civil(txtEstadoCivilEdit.getText().trim());
+        funcionario.setSexo(txtSexoEdit.getText().trim());
+        funcionario.setDireccion(txtDireccionEdit.getText().trim());
+        funcionario.setTelefono(txtTelefonoEdit.getText().trim());
+
+        String fechaNacimientoStr = txtFechaEdit.getText().trim();
+        java.sql.Date fechaNacimientoEdit = null;
+
+        try {
+            SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
+            java.util.Date utilFechaNacimiento = formatoFecha.parse(fechaNacimientoStr);
+            fechaNacimientoEdit = new java.sql.Date(utilFechaNacimiento.getTime());
+            funcionario.setFecha_nacimiento(fechaNacimientoEdit);
+        } catch (ParseException e) {
+
+        }
+
+        int opt = JOptionPane.showConfirmDialog(
+                null,
+                "¿Desea actualizar el funcionario?",
+                "Confirmar salida",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE
+        );
+
+        if (opt == 0) {
+
+            try {
+                funcionarioController.actualizarFuncionario(Integer.parseInt(txtId.getText()), funcionario);
+                txtId.setText("");
+                txtTipoIdentificacionEdit.setText("");
+                txtNumeroIdentificacionEdit.setText("");
+                txtNombreEdit.setText("");
+                txtApellidoEdit.setText("");
+                txtEstadoCivilEdit.setText("");
+                txtSexoEdit.setText("");
+                txtDireccionEdit.setText("");
+                txtTelefonoEdit.setText("");
+                txtFechaEdit.setText("");
+
+                listFuncionarios();
+
+                JOptionPane.showMessageDialog(null, "Se ha actualizado correctamente");
+
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(null, "No fue posible actualizarlo");
+
+            }
+        }
+
+
     }//GEN-LAST:event_btnActualizarActionPerformed
 
     private void cmFuncionarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmFuncionarioActionPerformed
@@ -748,7 +871,7 @@ public class Main2 extends javax.swing.JFrame {
             txtTelefono.setText("");
             txtFechaNacimiento.setText("");
             listFuncionarios();
-            JOptionPane.showMessageDialog(null , "Funcionario creado con éxito");
+            JOptionPane.showMessageDialog(null, "Funcionario creado con éxito");
 
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -757,6 +880,51 @@ public class Main2 extends javax.swing.JFrame {
 
 
     }//GEN-LAST:event_btnCrearActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+
+        if (txtId.getText().trim().length() == 0) {
+            JOptionPane.showMessageDialog(null, "Selccione ID");
+            txtId.requestFocus();
+            return;
+        }
+
+        int opt = JOptionPane.showConfirmDialog(
+                null,
+                "¿Desea eliminar el funcionario?",
+                "Confirmar salida",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE
+        );
+
+        if (opt == 0) {
+
+            try {
+                funcionarioController.eliminarFuncionario(Integer.parseInt(txtId.getText()));
+                txtId.setText("");
+                txtTipoIdentificacionEdit.setText("");
+                txtNumeroIdentificacionEdit.setText("");
+                txtNombreEdit.setText("");
+                txtApellidoEdit.setText("");
+                txtEstadoCivilEdit.setText("");
+                txtSexoEdit.setText("");
+                txtDireccionEdit.setText("");
+                txtTelefonoEdit.setText("");
+                txtFechaEdit.setText("");
+
+                listFuncionarios();
+
+                JOptionPane.showMessageDialog(null, "Se ha eliminado correctamente");
+
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(null, "No fue posible eliminar");
+
+            }
+        }
+
+
+    }//GEN-LAST:event_btnEliminarActionPerformed
 
     /**
      * @param args the command line arguments

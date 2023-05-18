@@ -20,7 +20,7 @@ public class FuncionarioDao {
 
     private static final String GET_FUNCIONARIO_BY_ID = "SELECT * FROM funcionarios WHERE id = ? ";
 
-    private static final String UPDATE_CAR = "UPDATE funcionario SET "
+    private static final String UPDATE_CAR = "UPDATE funcionarios SET "
             + "tipo_identificacion = ?,"
             + "numero_identificacion = ?,"
             + "nombre = ?,"
